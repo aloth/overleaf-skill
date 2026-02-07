@@ -1,0 +1,28 @@
+{
+  "name": "@aloth/overleaf-skill",
+  "version": "1.1.0",
+  "description": "Agent skill for managing Overleaf LaTeX projects via olcli",
+  "keywords": [
+    "overleaf",
+    "latex",
+    "cli",
+    "arxiv",
+    "academic",
+    "agent-skill",
+    "agentskills",
+    "ai-agent",
+    "mcp",
+    "latex-editor",
+    "tex"
+  ],
+  "homepage": "https://github.com/aloth/overleaf-skill#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aloth/overleaf-skill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aloth/overleaf-skill/issues"
+  },
+  "author": "Alexander Loth <alex@alexloth.com>",
+  "license": "MIT"
+}

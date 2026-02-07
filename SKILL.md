@@ -4,7 +4,7 @@ description: Sync and manage Overleaf LaTeX projects from the command line. Pull
 license: MIT
 metadata:
   author: aloth
-  version: "1.0"
+  version: "1.1"
   cli: olcli
   install: brew tap aloth/tap && brew install olcli
 ---
@@ -40,6 +40,16 @@ Verify with:
 olcli whoami
 ```
 
+Debug authentication issues:
+```bash
+olcli check
+```
+
+Clear stored credentials:
+```bash
+olcli logout
+```
+
 ## Common Workflows
 
 ### Pull a project to work locally
@@ -73,19 +83,60 @@ olcli output bbl -o main.bbl   # Custom filename
 olcli output --list            # List all available outputs
 ```
 
+### Upload figures or assets
+
+```bash
+olcli upload figure1.png "My Paper"          # Upload to project root
+olcli upload diagram.pdf                      # Auto-detect project from .olcli.json
+```
+
+### Download specific files
+
+```bash
+olcli download main.tex "My Paper"           # Download single file
+olcli zip "My Paper"                          # Download entire project as zip
+```
+
+## arXiv Submission Workflow
+
+Complete workflow for preparing an arXiv submission:
+
+```bash
+# 1. Pull your project
+olcli pull "Research Paper"
+cd Research_Paper
+
+# 2. Compile to ensure everything builds
+olcli compile
+
+# 3. Download the .bbl file (arXiv requires .bbl, not .bib)
+olcli output bbl -o main.bbl
+
+# 4. Download any other needed outputs
+olcli output aux -o main.aux    # If needed
+
+# 5. Package for submission
+zip arxiv.zip *.tex main.bbl figures/*.pdf
+
+# 6. Verify the package compiles locally (optional)
+# Then upload arxiv.zip to arxiv.org
+```
+
 ## Commands Reference
 
 | Command | Description |
 |---------|-------------|
 | `olcli auth --cookie <value>` | Authenticate with session cookie |
 | `olcli whoami` | Check authentication status |
+| `olcli logout` | Clear stored credentials |
+| `olcli check` | Show config paths and credential sources |
 | `olcli list` | List all projects |
 | `olcli info [project]` | Show project details |
 | `olcli pull [project] [dir]` | Download project files |
 | `olcli push [dir]` | Upload local changes |
 | `olcli sync [dir]` | Bidirectional sync |
-| `olcli upload <file>` | Upload a single file |
-| `olcli download <file>` | Download a single file |
+| `olcli upload <file> [project]` | Upload a single file |
+| `olcli download <file> [project]` | Download a single file |
 | `olcli zip [project]` | Download as zip archive |
 | `olcli compile [project]` | Trigger compilation |
 | `olcli pdf [project]` | Compile and download PDF |
@@ -97,16 +148,4 @@ olcli output --list            # List all available outputs
 - **Dry run**: Use `olcli push --dry-run` to preview changes before uploading
 - **Force overwrite**: Use `olcli pull --force` to overwrite local changes
 - **Project ID**: You can use project ID instead of name (24-char hex from URL)
-
-## Troubleshooting
-
-### Session expired
-Get a fresh cookie from the browser and run `olcli auth` again.
-
-### Compilation fails
-Check the Overleaf web editor for detailed error logs.
-
-## Links
-
-- [GitHub](https://github.com/aloth/olcli)
-- [npm](https://www.npmjs.com/package/@aloth/olcli)
+- **Debug auth**: Run `olcli check` to see where credentials are loaded from
