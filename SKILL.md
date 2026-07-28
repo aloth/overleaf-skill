@@ -149,3 +149,30 @@ zip arxiv.zip *.tex main.bbl figures/*.pdf
 - **Force overwrite**: Use `olcli pull --force` to overwrite local changes
 - **Project ID**: You can use project ID instead of name (24-char hex from URL)
 - **Debug auth**: Run `olcli check` to see where credentials are loaded from
+- **Timeouts**: For large projects or slow connections, increase the timeout: `olcli pdf --timeout 120000` (default 10s). This applies to `pull`, `pdf`, `compile`, and `output`.
+
+## Troubleshooting
+
+### "Client network socket disconnected before secure TLS connection was established"
+
+This often happens when running behind a VPN or proxy app (Shadowrocket, Clash, Surge, etc.). Node.js's `https` module does **not** automatically use the system proxy settings.
+
+**Fix:** Add `overleaf.com` to the **DIRECT** routing rule in your proxy app.
+
+To verify connectivity before debugging the tool itself:
+```bash
+curl -sI https://www.overleaf.com/project
+```
+
+### Homebrew installation fails with npm cache errors
+
+If `brew install olcli` fails due to corrupted npm caches, use npm directly:
+```bash
+npm install -g @aloth/olcli
+```
+
+### Verify the CLI is correctly installed
+```bash
+olcli --version
+olcli check
+```

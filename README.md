@@ -48,9 +48,11 @@ olcli list                             # See all projects
 olcli pull "My Paper"                  # Download project
 cd My_Paper && vim main.tex            # Edit locally
 olcli sync                             # Push changes
-olcli pdf                              # Download PDF
+olcli pdf --timeout 120000             # Download PDF (large papers need higher timeout)
 olcli output bbl                       # Get .bbl for arXiv
 ```
+
+> 💡 **Timeouts:** Commands like `pull`, `pdf`, `compile`, and `output` default to a 10-second timeout. For large projects, increase it with `--timeout 120000` (2 minutes) or higher.
 
 ## arXiv Submission Workflow
 
@@ -81,3 +83,21 @@ zip arxiv-submission.zip *.tex main.bbl figures/*
 ## License
 
 MIT
+
+## Troubleshooting
+
+### TLS / proxy issues
+
+If you see `Client network socket disconnected before secure TLS connection was established`, it's likely because you're behind a VPN or proxy app (Shadowrocket, Clash, Surge, etc.). Node.js does **not** automatically use system proxy settings. Add `overleaf.com` to your proxy's **DIRECT** routing rule.
+
+Verify connectivity first:
+```bash
+curl -sI https://www.overleaf.com/project
+```
+
+### Homebrew install fails
+
+If `brew install olcli` fails with npm cache errors, install via npm instead:
+```bash
+npm install -g @aloth/olcli
+```
