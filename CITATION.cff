@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+title: "Overleaf Skill: An Agent Skill for LaTeX Project Management"
+message: "If you use this skill in your work, please cite it as below."
+type: software
+authors:
+  - family-names: Loth
+    given-names: Alexander
+    orcid: "https://orcid.org/0009-0003-9327-6865"
+version: "1.1"
+date-released: "2026-02-07"
+license: MIT
+repository-code: "https://github.com/aloth/overleaf-skill"
+url: "https://github.com/aloth/overleaf-skill"
+abstract: >
+  An Agent Skill that lets AI assistants work with Overleaf projects: pull and push
+  files, compile PDFs, download .bbl files for arXiv submission and sync bidirectionally
+  with conflict detection. Wraps the olcli command-line interface.
+keywords:
+  - Overleaf
+  - LaTeX
+  - agent skills
+  - academic writing
+  - AI assistants
