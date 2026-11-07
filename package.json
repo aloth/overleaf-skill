@@ -1,6 +1,6 @@
 {
   "name": "@aloth/overleaf-skill",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Agent skill for managing Overleaf LaTeX projects via olcli",
   "keywords": [
     "overleaf",

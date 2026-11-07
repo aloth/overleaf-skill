@@ -6,8 +6,8 @@ authors:
   - family-names: Loth
     given-names: Alexander
     orcid: "https://orcid.org/0009-0003-9327-6865"
-version: "1.1"
-date-released: "2026-02-07"
+version: "1.2"
+date-released: "2026-11-07"
 license: MIT
 repository-code: "https://github.com/aloth/overleaf-skill"
 url: "https://github.com/aloth/overleaf-skill"

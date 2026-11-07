@@ -2,9 +2,9 @@
 
 ## Authentication
 
-olcli uses session cookie authentication via `overleaf_session2`.
+olcli uses session cookie authentication via `overleaf_session2`. `olcli auth --browser` signs in through a browser window and stores the cookie; the steps below are only needed without a display.
 
-### Getting the cookie
+### Getting the cookie by hand
 
 1. Open browser DevTools (F12)
 2. Go to Application → Cookies → www.overleaf.com

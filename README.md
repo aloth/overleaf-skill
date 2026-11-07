@@ -18,6 +18,8 @@ An [Agent Skill](https://agentskills.io) for managing Overleaf LaTeX projects.
 - Compile PDFs and download them
 - Download `.bbl` files for arXiv submissions
 - Bidirectional sync with conflict detection
+- Diff against Overleaf, and a marked-up latexdiff PDF of your revision
+- Use Overleaf as a git remote, also on the free plan
 - Upload figures and assets to projects
 
 ## Installation
@@ -43,7 +45,7 @@ npm install -g @aloth/olcli
 ## Quick start
 
 ```bash
-olcli auth --cookie "SESSION_COOKIE"  # One-time setup
+olcli auth --browser                   # One-time setup
 olcli list                             # See all projects
 olcli pull "My Paper"                  # Download project
 cd My_Paper && vim main.tex            # Edit locally

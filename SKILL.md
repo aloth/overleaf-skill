@@ -1,10 +1,10 @@
 ---
 name: overleaf
-description: Sync and manage Overleaf LaTeX projects from the command line. Pull projects locally, push changes back, compile PDFs, and download compile outputs like .bbl files for arXiv submissions. Use when working with LaTeX, Overleaf, academic papers, or arXiv.
+description: Sync and manage Overleaf LaTeX projects from the command line. Pull projects locally, push changes back, diff against Overleaf, make a marked-up latexdiff PDF, use Overleaf as a git remote, compile PDFs, and download compile outputs like .bbl files for arXiv submissions. Works on the free Overleaf plan. Use when working with LaTeX, Overleaf, academic papers, or arXiv.
 license: MIT
 metadata:
   author: aloth
-  version: "1.1"
+  version: "1.2"
   cli: olcli
   install: brew tap aloth/tap && brew install olcli
 ---
@@ -25,24 +25,21 @@ npm install -g @aloth/olcli
 
 ## Authentication
 
-Get your session cookie from Overleaf:
+Sign in once through a browser window (needs olcli 0.16 or newer and Node 22 or newer). Works with SSO and two-factor logins; olcli keeps only the session cookie:
 
-1. Log into [overleaf.com](https://www.overleaf.com)
-2. Open DevTools (F12) → Application → Cookies
-3. Copy the value of `overleaf_session2`
+```bash
+olcli auth --browser
+```
+
+Without a display (a server, a container), paste the session cookie instead: log into [overleaf.com](https://www.overleaf.com), open DevTools (F12), Application, Cookies, and copy the value of `overleaf_session2`:
 
 ```bash
 olcli auth --cookie "YOUR_SESSION_COOKIE"
 ```
 
-Verify with:
+Check the setup (exits 1 when not signed in, so `olcli auth status || olcli auth --browser` signs in only when needed):
 ```bash
-olcli whoami
-```
-
-Debug authentication issues:
-```bash
-olcli check
+olcli auth status
 ```
 
 Clear stored credentials:
@@ -66,6 +63,28 @@ cd My_Paper/
 olcli push              # Upload changes only
 olcli sync              # Bidirectional sync (pull + push)
 ```
+
+### See what a push would change
+
+```bash
+olcli diff                     # unified diff against Overleaf as it is right now
+olcli diff --name-only         # just the changed paths
+olcli diff --latexdiff --pdf   # marked-up PDF of the revision, compiled on Overleaf
+```
+
+`olcli push` replaces whole files on Overleaf. Run `olcli diff` first when coauthors edit the same project.
+
+### Use Overleaf as a git remote
+
+```bash
+git clone overleaf::https://www.overleaf.com/project/<id> paper
+cd paper
+git pull                       # bring in coauthors' edits
+git commit -am "Rewrite results"
+git push                       # refused while Overleaf has edits you have not pulled
+```
+
+Needs olcli 0.16.1 or newer. If a push is refused, run `git pull`, resolve any conflict, commit and push again. `git push --force` overwrites Overleaf on purpose.
 
 ### Compile and download PDF
 
@@ -126,15 +145,16 @@ zip arxiv.zip *.tex main.bbl figures/*.pdf
 
 | Command | Description |
 |---------|-------------|
+| `olcli auth --browser` | Sign in through a browser window |
 | `olcli auth --cookie <value>` | Authenticate with session cookie |
-| `olcli whoami` | Check authentication status |
+| `olcli auth status` | Check authentication status and credential source |
 | `olcli logout` | Clear stored credentials |
-| `olcli check` | Show config paths and credential sources |
 | `olcli list` | List all projects |
 | `olcli info [project]` | Show project details |
 | `olcli pull [project] [dir]` | Download project files |
 | `olcli push [dir]` | Upload local changes |
 | `olcli sync [dir]` | Bidirectional sync |
+| `olcli diff [project] [dir]` | Diff local files against Overleaf (`--latexdiff --pdf` for a marked-up PDF) |
 | `olcli upload <file> [project]` | Upload a single file |
 | `olcli download <file> [project]` | Download a single file |
 | `olcli zip [project]` | Download as zip archive |
@@ -148,4 +168,5 @@ zip arxiv.zip *.tex main.bbl figures/*.pdf
 - **Dry run**: Use `olcli push --dry-run` to preview changes before uploading
 - **Force overwrite**: Use `olcli pull --force` to overwrite local changes
 - **Project ID**: You can use project ID instead of name (24-char hex from URL)
-- **Debug auth**: Run `olcli check` to see where credentials are loaded from
+- **Debug auth**: Run `olcli auth status` to see the account and where credentials are loaded from
+- **Before a push**: Run `olcli diff` to see what the push would overwrite
